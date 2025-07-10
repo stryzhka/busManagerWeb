@@ -1,0 +1,21 @@
+services:
+  database:
+    image: postgres
+    restart: always
+    environment:                  # это перменные окружения для базы данных (штуки которые читает база данных прежде чем запуститься) их можно менять
+      POSTGRES_USER: 'postgres'      # это имя юзера, для подключения к базе, его можно поменять на любое другое
+      POSTGRES_PASSWORD: 'root'  # это пароль, для подключения к базе, его можно поменять на любой другое
+      POSTGRES_DB: 'postgres'   # это имя базы данных которая создаться при запуске базы, его можно поменять
+    networks:
+      - backend
+    ports:
+      - "5435:5432"
+    volumes:
+      - database-pg:/var/lib/postgresql/data
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  database-pg:
