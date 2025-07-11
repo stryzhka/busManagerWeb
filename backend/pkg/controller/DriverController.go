@@ -7,17 +7,17 @@ import (
 	"net/http"
 )
 
-type BusController struct {
-	bs service.IBusService
+type DriverController struct {
+	ds service.IDriverService
 }
 
-func NewBusController(bs service.BusService) *BusController {
-	return &BusController{bs}
+func NewDriverController(ds service.DriverService) *DriverController {
+	return &DriverController{ds}
 }
 
-func (bc BusController) GetById(c *gin.Context) {
+func (dc DriverController) GetById(c *gin.Context) {
 	id := c.Param("id")
-	data, err := bc.bs.GetById(id)
+	data, err := dc.ds.GetById(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -25,9 +25,9 @@ func (bc BusController) GetById(c *gin.Context) {
 	c.JSON(http.StatusOK, data)
 }
 
-func (bc BusController) GetByNumber(c *gin.Context) {
-	number := c.Param("number")
-	data, err := bc.bs.GetByNumber(number)
+func (dc DriverController) GetByPassportSeries(c *gin.Context) {
+	series := c.Param("series")
+	data, err := dc.ds.GetByPassportSeries(series)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -35,28 +35,28 @@ func (bc BusController) GetByNumber(c *gin.Context) {
 	c.JSON(http.StatusOK, data)
 }
 
-func (bc BusController) GetAll(c *gin.Context) {
-	data := bc.bs.GetAll()
+func (dc DriverController) GetAll(c *gin.Context) {
+	data := dc.ds.GetAll()
 	c.JSON(http.StatusOK, data)
 }
 
-func (bc BusController) Add(c *gin.Context) {
-	var bus models.Bus
-	if err := c.ShouldBindJSON(&bus); err != nil {
+func (dc DriverController) Add(c *gin.Context) {
+	var driver models.Driver
+	if err := c.ShouldBindJSON(&driver); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := bc.bs.Add(&bus)
+	err := dc.ds.Add(&driver)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, bus)
+	c.JSON(http.StatusOK, driver)
 }
 
-func (bc BusController) DeleteById(c *gin.Context) {
+func (dc DriverController) DeleteById(c *gin.Context) {
 	id := c.Param("id")
-	err := bc.bs.DeleteById(id)
+	err := dc.ds.DeleteById(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -64,16 +64,16 @@ func (bc BusController) DeleteById(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": id})
 }
 
-func (bc BusController) UpdateById(c *gin.Context) {
-	var bus models.Bus
-	if err := c.ShouldBindJSON(&bus); err != nil {
+func (dc DriverController) UpdateById(c *gin.Context) {
+	var driver models.Driver
+	if err := c.ShouldBindJSON(&driver); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := bc.bs.UpdateById(&bus)
+	err := dc.ds.UpdateById(&driver)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, bus)
+	c.JSON(http.StatusOK, driver)
 }
