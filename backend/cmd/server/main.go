@@ -1,13 +1,27 @@
 package main
 
 import (
+	_ "backend/docs"
 	"backend/pkg/controller"
 	"backend/pkg/database"
 	"backend/pkg/repository"
 	"backend/pkg/service"
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 )
 
+// @title           Bus manager API
+// @version         1.0
+// @description     API for bus manager backend
+
+// @host      localhost:8080
+// @BasePath  /api
+
+// --@securityDefinitions.basic  BasicAuth
+
+// @externalDocs.description  OpenAPI
+// @externalDocs.url          https://swagger.io/resources/open-api/
 func main() {
 	db, err := database.NewPostgresDatabase()
 	if err != nil {
@@ -44,14 +58,14 @@ func main() {
 	router.GET("/api/buses/", busController.GetAll)
 	router.POST("/api/buses/", busController.Add)
 	router.DELETE("/api/buses/:id", busController.DeleteById)
-	router.PUT("/api/buses/", busController.UpdateById)
+	router.PUT("/api/buses/:id", busController.UpdateById)
 
 	router.GET("/api/drivers/id/:id", driverController.GetById)
 	router.GET("/api/drivers/series/:series", driverController.GetByPassportSeries)
 	router.GET("/api/drivers/", driverController.GetAll)
 	router.POST("/api/drivers/", driverController.Add)
 	router.DELETE("/api/drivers/:id", driverController.DeleteById)
-	router.PUT("/api/drivers/", driverController.UpdateById)
+	router.PUT("/api/drivers/:id", driverController.UpdateById)
 
 	router.GET("/api/stops/id/:id", busStopController.GetById)
 	router.GET("/api/stops/number/:name", busStopController.GetByName)
@@ -75,7 +89,7 @@ func main() {
 	router.DELETE("/api/routes/:id/drivers/:driverId", routeController.UnassignDriver)
 	router.DELETE("/api/routes/:id/stops/:busStopId", routeController.UnassignBusStop)
 	router.DELETE("/api/routes/:id/buses/:busId", routeController.UnassignBus)
-
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run("localhost:8080")
 
 }

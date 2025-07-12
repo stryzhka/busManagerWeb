@@ -1,0 +1,333 @@
+basePath: /api
+definitions:
+  models.Bus:
+    properties:
+      assemblyDate:
+        type: string
+      brand:
+        type: string
+      busModel:
+        type: string
+      id:
+        type: string
+      lastRepairDate:
+        type: string
+      registerNumber:
+        type: string
+    type: object
+  models.Driver:
+    properties:
+      birthDate:
+        type: string
+      id:
+        type: string
+      licenseSeries:
+        type: string
+      name:
+        type: string
+      passportSeries:
+        type: string
+      patronymic:
+        type: string
+      snils:
+        type: string
+      surname:
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact: {}
+  description: API for bus manager backend
+  title: Bus manager API
+  version: "1.0"
+paths:
+  /buses/:
+    get:
+      description: Get bus list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Bus'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Get bus list
+      tags:
+      - buses
+    post:
+      description: Add bus
+      parameters:
+      - description: bus model
+        in: body
+        name: bus
+        required: true
+        schema:
+          $ref: '#/definitions/models.Bus'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Bus'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add bus
+      tags:
+      - buses
+  /buses/{id}:
+    delete:
+      description: Delete bus by ID
+      parameters:
+      - description: Bus ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete bus
+      tags:
+      - buses
+    put:
+      description: Update bus by ID
+      parameters:
+      - description: Bus ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: bus model
+        in: body
+        name: bus
+        required: true
+        schema:
+          $ref: '#/definitions/models.Bus'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Bus'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update bus
+      tags:
+      - buses
+  /buses/id/{id}:
+    get:
+      description: Get bus by ID
+      parameters:
+      - description: Bus ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Bus'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Get bus
+      tags:
+      - buses
+  /buses/number/{number}:
+    get:
+      description: Get bus by number
+      parameters:
+      - description: Bus register number
+        in: path
+        name: number
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Bus'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Get bus
+      tags:
+      - buses
+  /drivers/:
+    get:
+      description: Get driver list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Driver'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Get driver list
+      tags:
+      - drivers
+    post:
+      description: Add driver
+      parameters:
+      - description: driver model
+        in: body
+        name: driver
+        required: true
+        schema:
+          $ref: '#/definitions/models.Driver'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Driver'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add driver
+      tags:
+      - drivers
+  /drivers/{id}:
+    delete:
+      description: Delete driver by ID
+      parameters:
+      - description: Driver ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete driver
+      tags:
+      - drivers
+    put:
+      description: Update driver by ID
+      parameters:
+      - description: Driver ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: driver model
+        in: body
+        name: driver
+        required: true
+        schema:
+          $ref: '#/definitions/models.Driver'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Driver'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update driver
+      tags:
+      - drivers
+  /drivers/id/{id}:
+    get:
+      description: Get driver by ID
+      parameters:
+      - description: Driver ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Driver'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Get driver
+      tags:
+      - drivers
+  /drivers/series/{series}:
+    get:
+      description: Get driver by passport series
+      parameters:
+      - description: Driver passport series
+        in: path
+        name: series
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Driver'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Get driver
+      tags:
+      - drivers
+swagger: "2.0"
