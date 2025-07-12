@@ -7,13 +7,6 @@ import (
 )
 
 func NewPostgresDatabase() (*sql.DB, error) {
-	viper.SetConfigName("db")
-	viper.SetConfigType("toml")
-	viper.AddConfigPath("configs")
-	err := viper.ReadInConfig()
-	if err != nil {
-		return nil, err
-	}
 	info := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		viper.Get("host"), viper.Get("port"), viper.Get("user"), viper.Get("password"), viper.Get("dbname"))

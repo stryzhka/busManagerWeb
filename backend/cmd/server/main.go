@@ -6,7 +6,9 @@ import (
 	"backend/pkg/database"
 	"backend/pkg/repository"
 	"backend/pkg/service"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
 )
@@ -23,6 +25,10 @@ import (
 // @externalDocs.description  OpenAPI
 // @externalDocs.url          https://swagger.io/resources/open-api/
 func main() {
+	err := initConfig()
+	if err != nil {
+		fmt.Println(err)
+	}
 	db, err := database.NewPostgresDatabase()
 	if err != nil {
 		panic(err)
@@ -90,6 +96,13 @@ func main() {
 	router.DELETE("/api/routes/:id/stops/:busStopId", routeController.UnassignBusStop)
 	router.DELETE("/api/routes/:id/buses/:busId", routeController.UnassignBus)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	router.Run("localhost:8080")
+	router.Run(viper.GetString("server_host_port"))
+}
+
+func initConfig() error {
+	viper.SetConfigName("config")
+	viper.SetConfigType("toml")
+	viper.AddConfigPath("configs")
+	return viper.ReadInConfig()
 
 }

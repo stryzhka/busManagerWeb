@@ -3,3 +3,4 @@ port = 5435
 user = "postgres"
 password = "root"
 dbname = "postgres"
+server_host_port = "localhost:8080"
