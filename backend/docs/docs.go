@@ -448,6 +448,223 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/stops/": {
+            "get": {
+                "description": "Get bus stop list",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stops"
+                ],
+                "summary": "Get bus stop list",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.BusStop"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add bus stop",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stops"
+                ],
+                "summary": "Add bus stop",
+                "parameters": [
+                    {
+                        "description": "bus stop model",
+                        "name": "bus",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.BusStop"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.BusStop"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/stops/id/{id}": {
+            "get": {
+                "description": "Get bus stop by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stops"
+                ],
+                "summary": "Get bus stop",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bus stop ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.BusStop"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/stops/name/{name}": {
+            "get": {
+                "description": "Get bus stop by name",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stops"
+                ],
+                "summary": "Get bus stop",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bus stop name",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.BusStop"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/stops/{id}": {
+            "put": {
+                "description": "Update bus stop by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stops"
+                ],
+                "summary": "Update bus stop",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bus stop ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "bus stop model",
+                        "name": "bus",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.BusStop"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.BusStop"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete bus stop by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stops"
+                ],
+                "summary": "Delete bus stop",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bus stop ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -470,6 +687,23 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "registerNumber": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.BusStop": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "lat": {
+                    "type": "number"
+                },
+                "long": {
+                    "type": "number"
+                },
+                "name": {
                     "type": "string"
                 }
             }
