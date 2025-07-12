@@ -37,7 +37,7 @@ func (bsc BusStopController) GetById(c *gin.Context) {
 // @Description  Get bus stop by name
 // @Tags         stops
 // @Produce      json
-// @Param        id   path      string  true  "Bus stop name"
+// @Param        name   path      string  true  "Bus stop name"
 // @Success      200  {object}  models.BusStop
 // @Failure      404  {object}  string
 // @Router       /stops/name/{name} [get]
@@ -56,7 +56,7 @@ func (bsc BusStopController) GetByName(c *gin.Context) {
 // @Tags         stops
 // @Produce      json
 // @Success      200  {array}  models.BusStop
-// @Failure      404  {object}  string
+// @Failure      500  {object}  string
 // @Router       /stops/ [get]
 func (bsc BusStopController) GetAll(c *gin.Context) {
 	data, err := bsc.bss.GetAll()

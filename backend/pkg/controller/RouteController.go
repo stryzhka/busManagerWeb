@@ -15,6 +15,14 @@ func NewRouteController(rs service.IRouteService) *RouteController {
 	return &RouteController{rs}
 }
 
+// @Summary      Get route
+// @Description  Get route by ID
+// @Tags         routes
+// @Produce      json
+// @Param        id   path      string  true  "Route ID"
+// @Success      200  {object}  models.Route
+// @Failure      404  {object}  string
+// @Router       /routes/id/{id} [get]
 func (rc RouteController) GetById(c *gin.Context) {
 	id := c.Param("id")
 	data, err := rc.rs.GetById(id)
@@ -25,6 +33,14 @@ func (rc RouteController) GetById(c *gin.Context) {
 	c.JSON(http.StatusOK, data)
 }
 
+// @Summary      Get route
+// @Description  Get route by number
+// @Tags         routes
+// @Produce      json
+// @Param        number   path      string  true  "Route number"
+// @Success      200  {object}  models.Route
+// @Failure      404  {object}  string
+// @Router       /routes/id/{id} [get]
 func (rc RouteController) GetByNumber(c *gin.Context) {
 	number := c.Param("number")
 	data, err := rc.rs.GetByNumber(number)
@@ -35,6 +51,13 @@ func (rc RouteController) GetByNumber(c *gin.Context) {
 	c.JSON(http.StatusOK, data)
 }
 
+// @Summary      Get routes list
+// @Description  Get routes list
+// @Tags         routes
+// @Produce      json
+// @Success      200  {array}  models.Route
+// @Failure      500  {object}  string
+// @Router       /routes/ [get]
 func (rc RouteController) GetAll(c *gin.Context) {
 	data, err := rc.rs.GetAll()
 	if err != nil {
@@ -44,6 +67,15 @@ func (rc RouteController) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, data)
 }
 
+// @Summary      Add route
+// @Description  Add route
+// @Tags         routes
+// @Produce      json
+// @Param route body models.Route required "route model"
+// @Success      200  {object}  models.Route
+// @Failure      404  {object}  string
+// @Failure      500  {object}  string
+// @Router       /routes/ [post]
 func (rc RouteController) Add(c *gin.Context) {
 	var route models.Route
 	if err := c.ShouldBindJSON(&route); err != nil {
@@ -58,6 +90,14 @@ func (rc RouteController) Add(c *gin.Context) {
 	c.JSON(http.StatusOK, route)
 }
 
+// @Summary      Delete route
+// @Description  Delete route by ID
+// @Tags         routes
+// @Produce      json
+// @Param        id   path      string  true  "Route ID"
+// @Success      200  {object}  string
+// @Failure      500  {object}  string
+// @Router       /routes/{id} [delete]
 func (rc RouteController) DeleteById(c *gin.Context) {
 	id := c.Param("id")
 	err := rc.rs.DeleteById(id)
@@ -68,6 +108,15 @@ func (rc RouteController) DeleteById(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": id})
 }
 
+// @Summary      Update route
+// @Description  Update route by ID
+// @Tags         routes
+// @Produce      json
+// @Param        id   path      string  true  "Route ID"
+// @Param route body models.Route required "route model"
+// @Success      200  {object}  models.Route
+// @Failure      500  {object}  string
+// @Router       /routes/{id} [put]
 func (rc RouteController) UpdateById(c *gin.Context) {
 	var route models.Route
 	if err := c.ShouldBindJSON(&route); err != nil {
@@ -82,6 +131,15 @@ func (rc RouteController) UpdateById(c *gin.Context) {
 	c.JSON(http.StatusOK, route)
 }
 
+// @Summary      Assign driver to route
+// @Description  Assign driver to route
+// @Tags         routes
+// @Produce      json
+// @Param        id   path      string  true  "Route ID"
+// @Param        driverId   path      string  true  "Driver ID"
+// @Success      200  {object}  string
+// @Failure      500  {object}  string
+// @Router       /routes/{id}/drivers/{driverId} [post]
 func (rc RouteController) AssignDriver(c *gin.Context) {
 	routeId := c.Param("id")
 	driverId := c.Param("driverId")
@@ -93,6 +151,15 @@ func (rc RouteController) AssignDriver(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": routeId})
 }
 
+// @Summary      Assign bus stop to route
+// @Description  Assign bus stop to route
+// @Tags         routes
+// @Produce      json
+// @Param        id   path      string  true  "Route ID"
+// @Param        busStopId   path      string  true  "Bus stop ID"
+// @Success      200  {object}  string
+// @Failure      500  {object}  string
+// @Router       /routes/{id}/stops/{busStopId} [post]
 func (rc RouteController) AssignBusStop(c *gin.Context) {
 	routeId := c.Param("id")
 	busStopId := c.Param("busStopId")
@@ -104,6 +171,15 @@ func (rc RouteController) AssignBusStop(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": routeId})
 }
 
+// @Summary      Assign bus to route
+// @Description  Assign bus to route
+// @Tags         routes
+// @Produce      json
+// @Param        id   path      string  true  "Route ID"
+// @Param        busId   path      string  true  "Bus ID"
+// @Success      200  {object}  string
+// @Failure      500  {object}  string
+// @Router       /routes/{id}/buses/{busId} [post]
 func (rc RouteController) AssignBus(c *gin.Context) {
 	routeId := c.Param("id")
 	busId := c.Param("busId")
@@ -115,6 +191,15 @@ func (rc RouteController) AssignBus(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": routeId})
 }
 
+// @Summary      Unassign driver from route
+// @Description  Unassign driver from route
+// @Tags         routes
+// @Produce      json
+// @Param        id   path      string  true  "Route ID"
+// @Param        driverId   path      string  true  "Driver ID"
+// @Success      200  {object}  string
+// @Failure      500  {object}  string
+// @Router       /routes/{id}/drivers/{driverId} [delete]
 func (rc RouteController) UnassignDriver(c *gin.Context) {
 	routeId := c.Param("id")
 	driverId := c.Param("driverId")
@@ -126,6 +211,15 @@ func (rc RouteController) UnassignDriver(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": routeId})
 }
 
+// @Summary      Unassign bus stop from route
+// @Description  Unassign bus stop from route
+// @Tags         routes
+// @Produce      json
+// @Param        id   path      string  true  "Route ID"
+// @Param        busStopId   path      string  true  "Bus stop ID"
+// @Success      200  {object}  string
+// @Failure      500  {object}  string
+// @Router       /routes/{id}/stops/{busStopId} [delete]
 func (rc RouteController) UnassignBusStop(c *gin.Context) {
 	routeId := c.Param("id")
 	busStopId := c.Param("busStopId")
@@ -137,6 +231,15 @@ func (rc RouteController) UnassignBusStop(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": routeId})
 }
 
+// @Summary      Unassign bus from route
+// @Description  Unassign bus from route
+// @Tags         routes
+// @Produce      json
+// @Param        id   path      string  true  "Route ID"
+// @Param        busId   path      string  true  "Bus ID"
+// @Success      200  {object}  string
+// @Failure      500  {object}  string
+// @Router       /routes/{id}/buses/{busId} [delete]
 func (rc RouteController) UnassignBus(c *gin.Context) {
 	routeId := c.Param("id")
 	busId := c.Param("busId")
@@ -148,6 +251,14 @@ func (rc RouteController) UnassignBus(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": routeId})
 }
 
+// @Summary      Get all drivers on route
+// @Description  Get all drivers on route by route ID
+// @Tags         routes
+// @Produce      json
+// @Param        id   path      string  true  "Route ID"
+// @Success      200  {object}  models.Driver
+// @Failure      500  {object}  string
+// @Router       /routes/{id}/drivers/ [get]
 func (rc RouteController) GetAllDriversById(c *gin.Context) {
 	id := c.Param("id")
 	data, err := rc.rs.GetAllDriversById(id)
@@ -157,6 +268,14 @@ func (rc RouteController) GetAllDriversById(c *gin.Context) {
 	c.JSON(http.StatusOK, data)
 }
 
+// @Summary      Get all buses on route
+// @Description  Get all buses on route by route ID
+// @Tags         routes
+// @Produce      json
+// @Param        id   path      string  true  "Route ID"
+// @Success      200  {object}  models.Bus
+// @Failure      500  {object}  string
+// @Router       /routes/{id}/buses/ [get]
 func (rc RouteController) GetAllBusesById(c *gin.Context) {
 	id := c.Param("id")
 	data, err := rc.rs.GetAllBusesById(id)
@@ -166,6 +285,14 @@ func (rc RouteController) GetAllBusesById(c *gin.Context) {
 	c.JSON(http.StatusOK, data)
 }
 
+// @Summary      Get all bus stops on route
+// @Description  Get all bus stops on route by route ID
+// @Tags         routes
+// @Produce      json
+// @Param        id   path      string  true  "Route ID"
+// @Success      200  {object}  models.BusStop
+// @Failure      500  {object}  string
+// @Router       /routes/{id}/stops/ [get]
 func (rc RouteController) GetAllBusStopsById(c *gin.Context) {
 	id := c.Param("id")
 	data, err := rc.rs.GetAllBusStopsById(id)

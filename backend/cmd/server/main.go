@@ -85,7 +85,7 @@ func main() {
 	router.POST("/api/routes/:id/buses/:busId", routeController.AssignBus)
 	router.GET("/api/routes/:id/drivers/", routeController.GetAllDriversById)
 	router.GET("/api/routes/:id/stops/", routeController.GetAllBusStopsById)
-	router.GET("/api/routes/:id/buses/", routeController.GetAllDriversById)
+	router.GET("/api/routes/:id/buses/", routeController.GetAllBusesById)
 	router.DELETE("/api/routes/:id/drivers/:driverId", routeController.UnassignDriver)
 	router.DELETE("/api/routes/:id/stops/:busStopId", routeController.UnassignBusStop)
 	router.DELETE("/api/routes/:id/buses/:busId", routeController.UnassignBus)

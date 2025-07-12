@@ -45,6 +45,13 @@ definitions:
       surname:
         type: string
     type: object
+  models.Route:
+    properties:
+      id:
+        type: string
+      number:
+        type: string
+    type: object
 externalDocs:
   description: OpenAPI
   url: https://swagger.io/resources/open-api/
@@ -341,6 +348,360 @@ paths:
       summary: Get driver
       tags:
       - drivers
+  /routes/:
+    get:
+      description: Get routes list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Route'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get routes list
+      tags:
+      - routes
+    post:
+      description: Add route
+      parameters:
+      - description: route model
+        in: body
+        name: route
+        required: true
+        schema:
+          $ref: '#/definitions/models.Route'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Route'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add route
+      tags:
+      - routes
+  /routes/{id}:
+    delete:
+      description: Delete route by ID
+      parameters:
+      - description: Route ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete route
+      tags:
+      - routes
+    put:
+      description: Update route by ID
+      parameters:
+      - description: Route ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: route model
+        in: body
+        name: route
+        required: true
+        schema:
+          $ref: '#/definitions/models.Route'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Route'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update route
+      tags:
+      - routes
+  /routes/{id}/buses/:
+    get:
+      description: Get all buses on route by route ID
+      parameters:
+      - description: Route ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Bus'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all buses on route
+      tags:
+      - routes
+  /routes/{id}/buses/{busId}:
+    delete:
+      description: Unassign bus from route
+      parameters:
+      - description: Route ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Bus ID
+        in: path
+        name: busId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Unassign bus from route
+      tags:
+      - routes
+    post:
+      description: Assign bus to route
+      parameters:
+      - description: Route ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Bus ID
+        in: path
+        name: busId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Assign bus to route
+      tags:
+      - routes
+  /routes/{id}/drivers/:
+    get:
+      description: Get all drivers on route by route ID
+      parameters:
+      - description: Route ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Driver'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all drivers on route
+      tags:
+      - routes
+  /routes/{id}/drivers/{driverId}:
+    delete:
+      description: Unassign driver from route
+      parameters:
+      - description: Route ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Driver ID
+        in: path
+        name: driverId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Unassign driver from route
+      tags:
+      - routes
+    post:
+      description: Assign driver to route
+      parameters:
+      - description: Route ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Driver ID
+        in: path
+        name: driverId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Assign driver to route
+      tags:
+      - routes
+  /routes/{id}/stops/:
+    get:
+      description: Get all bus stops on route by route ID
+      parameters:
+      - description: Route ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BusStop'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all bus stops on route
+      tags:
+      - routes
+  /routes/{id}/stops/{busStopId}:
+    delete:
+      description: Unassign bus stop from route
+      parameters:
+      - description: Route ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Bus stop ID
+        in: path
+        name: busStopId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Unassign bus stop from route
+      tags:
+      - routes
+    post:
+      description: Assign bus stop to route
+      parameters:
+      - description: Route ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Bus stop ID
+        in: path
+        name: busStopId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Assign bus stop to route
+      tags:
+      - routes
+  /routes/id/{id}:
+    get:
+      description: Get route by number
+      parameters:
+      - description: Route number
+        in: path
+        name: number
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Route'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Get route
+      tags:
+      - routes
   /stops/:
     get:
       description: Get bus stop list
@@ -353,8 +714,8 @@ paths:
             items:
               $ref: '#/definitions/models.BusStop'
             type: array
-        "404":
-          description: Not Found
+        "500":
+          description: Internal Server Error
           schema:
             type: string
       summary: Get bus stop list
@@ -467,7 +828,7 @@ paths:
       parameters:
       - description: Bus stop name
         in: path
-        name: id
+        name: name
         required: true
         type: string
       produces:
