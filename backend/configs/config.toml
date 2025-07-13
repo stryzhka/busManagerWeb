@@ -1,6 +1,6 @@
-host = "localhost"
-port = 5435
+host = "database"
+port = 5432
 user = "postgres"
 password = "root"
 dbname = "postgres"
-server_host_port = "localhost:8080"
+server_host_port = "0.0.0.0:8080"

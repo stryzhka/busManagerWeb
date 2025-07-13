@@ -8,9 +8,11 @@ import (
 	"backend/pkg/service"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
+	"github.com/joho/godotenv"
 	"github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
+	"os"
+	"strings"
 )
 
 // @title           Bus manager API
@@ -25,11 +27,11 @@ import (
 // @externalDocs.description  OpenAPI
 // @externalDocs.url          https://swagger.io/resources/open-api/
 func main() {
-	err := initConfig()
+	err, connStr, serverConn := initConfig()
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
-	db, err := database.NewPostgresDatabase()
+	db, err := database.NewPostgresDatabase(connStr)
 	if err != nil {
 		panic(err)
 	}
@@ -96,13 +98,21 @@ func main() {
 	router.DELETE("/api/routes/:id/stops/:busStopId", routeController.UnassignBusStop)
 	router.DELETE("/api/routes/:id/buses/:busId", routeController.UnassignBus)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	router.Run(viper.GetString("server_host_port"))
+	router.Run(serverConn)
 }
 
-func initConfig() error {
-	viper.SetConfigName("config")
-	viper.SetConfigType("toml")
-	viper.AddConfigPath("configs")
-	return viper.ReadInConfig()
-
+func initConfig() (error, string, string) {
+	if _, err := os.Stat(".env"); err == nil {
+		err := godotenv.Load()
+		if err != nil {
+			return err, "", ""
+		}
+	}
+	connStr := fmt.Sprintf("host=%s port=%s user=%s "+
+		"password=%s dbname=%s sslmode=disable",
+		os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"))
+	serverConn := strings.TrimSpace(os.Getenv("SERVER"))
+	fmt.Println(serverConn)
+	fmt.Println(connStr)
+	return nil, connStr, serverConn
 }

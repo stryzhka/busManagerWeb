@@ -1,4 +1,23 @@
 services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+#    volumes:
+#      - ./backend:/go/src/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    networks:
+      - backend
+    environment:
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=root
+      - DB_NAME=postgres
+      - SERVER=0.0.0.0:8080
   database:
     image: postgres
     restart: always

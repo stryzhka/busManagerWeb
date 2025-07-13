@@ -3,14 +3,10 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"github.com/spf13/viper"
 )
 
-func NewPostgresDatabase() (*sql.DB, error) {
-	info := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		viper.Get("host"), viper.Get("port"), viper.Get("user"), viper.Get("password"), viper.Get("dbname"))
-	db, err := sql.Open("postgres", info)
+func NewPostgresDatabase(connStr string) (*sql.DB, error) {
+	db, err := sql.Open("postgres", connStr)
 
 	if err != nil {
 		return nil, err
