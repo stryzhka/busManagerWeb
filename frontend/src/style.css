@@ -1,0 +1,31 @@
+html {
+    background-color: rgba(27, 38, 54, 1);
+    text-align: center;
+    color: white;
+}
+
+body {
+    margin: 0;
+    color: white;
+    font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif, "Fixedsys";
+}
+
+@font-face {
+    font-family: "Fixedsys";
+    font-style: normal;
+    font-weight: 400;
+    src: local(""),
+    url("assets/fonts/fixedsys.ttf") format("ttf");
+}
+
+#app {
+    height: 100vh;
+    text-align: center;
+}
+
+.leaflet-control-container .leaflet-routing-container-hide {
+    display: none;
+}
+
