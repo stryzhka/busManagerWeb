@@ -21,13 +21,13 @@ func NewBusStopController(bss service.IBusStopService) *BusStopController {
 // @Produce      json
 // @Param        id   path      string  true  "Bus stop ID"
 // @Success      200  {object}  models.BusStop
-// @Failure      404  {object}  string
-// @Router       /stops/id/{id} [get]
+// @Failure      400  {object}  string
+// @Router       /stops/id/{id}/ [get]
 func (bsc BusStopController) GetById(c *gin.Context) {
 	id := c.Param("id")
 	data, err := bsc.bss.GetById(id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, data)
@@ -39,13 +39,13 @@ func (bsc BusStopController) GetById(c *gin.Context) {
 // @Produce      json
 // @Param        name   path      string  true  "Bus stop name"
 // @Success      200  {object}  models.BusStop
-// @Failure      404  {object}  string
-// @Router       /stops/name/{name} [get]
+// @Failure      400  {object}  string
+// @Router       /stops/name/{name}/ [get]
 func (bsc BusStopController) GetByName(c *gin.Context) {
 	name := c.Param("name")
 	data, err := bsc.bss.GetByName(name)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, data)
@@ -56,12 +56,12 @@ func (bsc BusStopController) GetByName(c *gin.Context) {
 // @Tags         stops
 // @Produce      json
 // @Success      200  {array}  models.BusStop
-// @Failure      500  {object}  string
+// @Failure      400  {object}  string
 // @Router       /stops/ [get]
 func (bsc BusStopController) GetAll(c *gin.Context) {
 	data, err := bsc.bss.GetAll()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, data)
@@ -73,8 +73,7 @@ func (bsc BusStopController) GetAll(c *gin.Context) {
 // @Produce      json
 // @Param bus body models.BusStop required "bus stop model"
 // @Success      200  {object}  models.BusStop
-// @Failure      404  {object}  string
-// @Failure      500  {object}  string
+// @Failure      400  {object}  string
 // @Router       /stops/ [post]
 func (bsc BusStopController) Add(c *gin.Context) {
 	var busStop models.BusStop
@@ -84,7 +83,7 @@ func (bsc BusStopController) Add(c *gin.Context) {
 	}
 	err := bsc.bss.Add(&busStop)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, busStop)
@@ -96,13 +95,13 @@ func (bsc BusStopController) Add(c *gin.Context) {
 // @Produce      json
 // @Param        id   path      string  true  "Bus stop ID"
 // @Success      200  {object}  string
-// @Failure      500  {object}  string
-// @Router       /stops/{id} [delete]
+// @Failure      400  {object}  string
+// @Router       /stops/{id}/ [delete]
 func (bsc BusStopController) DeleteById(c *gin.Context) {
 	id := c.Param("id")
 	err := bsc.bss.DeleteById(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"success": id})
@@ -115,8 +114,8 @@ func (bsc BusStopController) DeleteById(c *gin.Context) {
 // @Param        id   path      string  true  "Bus stop ID"
 // @Param bus body models.BusStop required "bus stop model"
 // @Success      200  {object}  models.BusStop
-// @Failure      500  {object}  string
-// @Router       /stops/{id} [put]
+// @Failure      400  {object}  string
+// @Router       /stops/{id}/ [put]
 func (bsc BusStopController) UpdateById(c *gin.Context) {
 	var busStop models.BusStop
 	if err := c.ShouldBindJSON(&busStop); err != nil {
@@ -125,7 +124,7 @@ func (bsc BusStopController) UpdateById(c *gin.Context) {
 	}
 	err := bsc.bss.UpdateById(&busStop)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, busStop)

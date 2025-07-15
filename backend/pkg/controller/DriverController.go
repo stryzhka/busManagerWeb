@@ -22,8 +22,8 @@ func NewDriverController(ds service.DriverService) *DriverController {
 // @Produce      json
 // @Param        id   path      string  true  "Driver ID"
 // @Success      200  {object}  models.Driver
-// @Failure      404  {object}  string
-// @Router       /drivers/id/{id} [get]
+// @Failure      400  {object}  string
+// @Router       /drivers/id/{id}/ [get]
 func (dc DriverController) GetById(c *gin.Context) {
 	id := c.Param("id")
 	data, err := dc.ds.GetById(id)
@@ -40,8 +40,8 @@ func (dc DriverController) GetById(c *gin.Context) {
 // @Produce      json
 // @Param        series   path      string  true  "Driver passport series"
 // @Success      200  {object}  models.Driver
-// @Failure      404  {object}  string
-// @Router       /drivers/series/{series} [get]
+// @Failure      400  {object}  string
+// @Router       /drivers/series/{series}/ [get]
 func (dc DriverController) GetByPassportSeries(c *gin.Context) {
 	series := c.Param("series")
 	data, err := dc.ds.GetByPassportSeries(series)
@@ -57,7 +57,7 @@ func (dc DriverController) GetByPassportSeries(c *gin.Context) {
 // @Tags         drivers
 // @Produce      json
 // @Success      200  {array}  models.Driver
-// @Failure      404  {object}  string
+// @Failure      400  {object}  string
 // @Router       /drivers/ [get]
 func (dc DriverController) GetAll(c *gin.Context) {
 	data := dc.ds.GetAll()
@@ -70,8 +70,8 @@ func (dc DriverController) GetAll(c *gin.Context) {
 // @Produce      json
 // @Param driver body models.Driver required "driver model"
 // @Success      200  {object}  models.Driver
-// @Failure      404  {object}  string
-// @Failure      500  {object}  string
+// @Failure      400  {object}  string
+
 // @Router       /drivers/ [post]
 func (dc DriverController) Add(c *gin.Context) {
 	var driver models.Driver
@@ -81,7 +81,7 @@ func (dc DriverController) Add(c *gin.Context) {
 	}
 	err := dc.ds.Add(&driver)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, driver)
@@ -93,13 +93,13 @@ func (dc DriverController) Add(c *gin.Context) {
 // @Produce      json
 // @Param        id   path      string  true  "Driver ID"
 // @Success      200  {object}  string
-// @Failure      500  {object}  string
-// @Router       /drivers/{id} [delete]
+// @Failure      400  {object}  string
+// @Router       /drivers/{id}/ [delete]
 func (dc DriverController) DeleteById(c *gin.Context) {
 	id := c.Param("id")
 	err := dc.ds.DeleteById(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"success": id})
@@ -112,8 +112,8 @@ func (dc DriverController) DeleteById(c *gin.Context) {
 // @Param        id   path      string  true  "Driver ID"
 // @Param driver body models.Driver required "driver model"
 // @Success      200  {object}  models.Driver
-// @Failure      500  {object}  string
-// @Router       /drivers/{id} [put]
+// @Failure      400  {object}  string
+// @Router       /drivers/{id}/ [put]
 func (dc DriverController) UpdateById(c *gin.Context) {
 	var driver models.Driver
 	if err := c.ShouldBindJSON(&driver); err != nil {
@@ -122,7 +122,7 @@ func (dc DriverController) UpdateById(c *gin.Context) {
 	}
 	err := dc.ds.UpdateById(&driver)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, driver)

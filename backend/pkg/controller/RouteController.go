@@ -21,31 +21,31 @@ func NewRouteController(rs service.IRouteService) *RouteController {
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Success      200  {object}  models.Route
-// @Failure      404  {object}  string
-// @Router       /routes/id/{id} [get]
+// @Failure      400  {object}  string
+// @Router       /routes/{id}/ [get]
 func (rc RouteController) GetById(c *gin.Context) {
 	id := c.Param("id")
 	data, err := rc.rs.GetById(id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, data)
 }
 
-// @Summary      Get route
+// @Summary      Get route by number
 // @Description  Get route by number
 // @Tags         routes
 // @Produce      json
 // @Param        number   path      string  true  "Route number"
 // @Success      200  {object}  models.Route
-// @Failure      404  {object}  string
-// @Router       /routes/id/{id} [get]
+// @Failure      400  {object}  string
+// @Router       /routes/number/{number}/ [get]
 func (rc RouteController) GetByNumber(c *gin.Context) {
 	number := c.Param("number")
 	data, err := rc.rs.GetByNumber(number)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, data)
@@ -56,12 +56,12 @@ func (rc RouteController) GetByNumber(c *gin.Context) {
 // @Tags         routes
 // @Produce      json
 // @Success      200  {array}  models.Route
-// @Failure      500  {object}  string
+// @Failure      400  {object}  string
 // @Router       /routes/ [get]
 func (rc RouteController) GetAll(c *gin.Context) {
 	data, err := rc.rs.GetAll()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 	c.JSON(http.StatusOK, data)
@@ -73,8 +73,8 @@ func (rc RouteController) GetAll(c *gin.Context) {
 // @Produce      json
 // @Param route body models.Route required "route model"
 // @Success      200  {object}  models.Route
-// @Failure      404  {object}  string
-// @Failure      500  {object}  string
+// @Failure      400  {object}  string
+// @Failure      400  {object}  string
 // @Router       /routes/ [post]
 func (rc RouteController) Add(c *gin.Context) {
 	var route models.Route
@@ -84,7 +84,7 @@ func (rc RouteController) Add(c *gin.Context) {
 	}
 	err := rc.rs.Add(&route)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, route)
@@ -96,13 +96,13 @@ func (rc RouteController) Add(c *gin.Context) {
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Success      200  {object}  string
-// @Failure      500  {object}  string
-// @Router       /routes/{id} [delete]
+// @Failure      400  {object}  string
+// @Router       /routes/{id}/ [delete]
 func (rc RouteController) DeleteById(c *gin.Context) {
 	id := c.Param("id")
 	err := rc.rs.DeleteById(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"success": id})
@@ -115,8 +115,8 @@ func (rc RouteController) DeleteById(c *gin.Context) {
 // @Param        id   path      string  true  "Route ID"
 // @Param route body models.Route required "route model"
 // @Success      200  {object}  models.Route
-// @Failure      500  {object}  string
-// @Router       /routes/{id} [put]
+// @Failure      400  {object}  string
+// @Router       /routes/{id}/ [put]
 func (rc RouteController) UpdateById(c *gin.Context) {
 	var route models.Route
 	if err := c.ShouldBindJSON(&route); err != nil {
@@ -125,7 +125,7 @@ func (rc RouteController) UpdateById(c *gin.Context) {
 	}
 	err := rc.rs.UpdateById(&route)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, route)
@@ -138,14 +138,14 @@ func (rc RouteController) UpdateById(c *gin.Context) {
 // @Param        id   path      string  true  "Route ID"
 // @Param        driverId   path      string  true  "Driver ID"
 // @Success      200  {object}  string
-// @Failure      500  {object}  string
-// @Router       /routes/{id}/drivers/{driverId} [post]
+// @Failure      400  {object}  string
+// @Router       /routes/{id}/drivers/{driverId}/ [post]
 func (rc RouteController) AssignDriver(c *gin.Context) {
 	routeId := c.Param("id")
 	driverId := c.Param("driverId")
 	err := rc.rs.AssignDriver(routeId, driverId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"success": routeId})
@@ -158,14 +158,14 @@ func (rc RouteController) AssignDriver(c *gin.Context) {
 // @Param        id   path      string  true  "Route ID"
 // @Param        busStopId   path      string  true  "Bus stop ID"
 // @Success      200  {object}  string
-// @Failure      500  {object}  string
-// @Router       /routes/{id}/stops/{busStopId} [post]
+// @Failure      400  {object}  string
+// @Router       /routes/{id}/stops/{busStopId}/ [post]
 func (rc RouteController) AssignBusStop(c *gin.Context) {
 	routeId := c.Param("id")
 	busStopId := c.Param("busStopId")
 	err := rc.rs.AssignBusStop(routeId, busStopId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"success": routeId})
@@ -178,14 +178,14 @@ func (rc RouteController) AssignBusStop(c *gin.Context) {
 // @Param        id   path      string  true  "Route ID"
 // @Param        busId   path      string  true  "Bus ID"
 // @Success      200  {object}  string
-// @Failure      500  {object}  string
-// @Router       /routes/{id}/buses/{busId} [post]
+// @Failure      400  {object}  string
+// @Router       /routes/{id}/buses/{busId}/ [post]
 func (rc RouteController) AssignBus(c *gin.Context) {
 	routeId := c.Param("id")
 	busId := c.Param("busId")
 	err := rc.rs.AssignBus(routeId, busId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"success": routeId})
@@ -198,14 +198,14 @@ func (rc RouteController) AssignBus(c *gin.Context) {
 // @Param        id   path      string  true  "Route ID"
 // @Param        driverId   path      string  true  "Driver ID"
 // @Success      200  {object}  string
-// @Failure      500  {object}  string
-// @Router       /routes/{id}/drivers/{driverId} [delete]
+// @Failure      400  {object}  string
+// @Router       /routes/{id}/drivers/{driverId}/ [delete]
 func (rc RouteController) UnassignDriver(c *gin.Context) {
 	routeId := c.Param("id")
 	driverId := c.Param("driverId")
 	err := rc.rs.UnassignDriver(routeId, driverId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"success": routeId})
@@ -218,14 +218,14 @@ func (rc RouteController) UnassignDriver(c *gin.Context) {
 // @Param        id   path      string  true  "Route ID"
 // @Param        busStopId   path      string  true  "Bus stop ID"
 // @Success      200  {object}  string
-// @Failure      500  {object}  string
-// @Router       /routes/{id}/stops/{busStopId} [delete]
+// @Failure      400  {object}  string
+// @Router       /routes/{id}/stops/{busStopId}/ [delete]
 func (rc RouteController) UnassignBusStop(c *gin.Context) {
 	routeId := c.Param("id")
 	busStopId := c.Param("busStopId")
 	err := rc.rs.UnassignBusStop(routeId, busStopId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"success": routeId})
@@ -238,14 +238,14 @@ func (rc RouteController) UnassignBusStop(c *gin.Context) {
 // @Param        id   path      string  true  "Route ID"
 // @Param        busId   path      string  true  "Bus ID"
 // @Success      200  {object}  string
-// @Failure      500  {object}  string
-// @Router       /routes/{id}/buses/{busId} [delete]
+// @Failure      400  {object}  string
+// @Router       /routes/{id}/buses/{busId}/ [delete]
 func (rc RouteController) UnassignBus(c *gin.Context) {
 	routeId := c.Param("id")
 	busId := c.Param("busId")
 	err := rc.rs.UnassignBus(routeId, busId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"success": routeId})
@@ -257,13 +257,14 @@ func (rc RouteController) UnassignBus(c *gin.Context) {
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Success      200  {object}  models.Driver
-// @Failure      500  {object}  string
+// @Failure      400  {object}  string
 // @Router       /routes/{id}/drivers/ [get]
 func (rc RouteController) GetAllDriversById(c *gin.Context) {
 	id := c.Param("id")
 	data, err := rc.rs.GetAllDriversById(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 	c.JSON(http.StatusOK, data)
 }
@@ -274,13 +275,14 @@ func (rc RouteController) GetAllDriversById(c *gin.Context) {
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Success      200  {object}  models.Bus
-// @Failure      500  {object}  string
+// @Failure      400  {object}  string
 // @Router       /routes/{id}/buses/ [get]
 func (rc RouteController) GetAllBusesById(c *gin.Context) {
 	id := c.Param("id")
 	data, err := rc.rs.GetAllBusesById(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 	c.JSON(http.StatusOK, data)
 }
@@ -291,13 +293,14 @@ func (rc RouteController) GetAllBusesById(c *gin.Context) {
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Success      200  {object}  models.BusStop
-// @Failure      500  {object}  string
+// @Failure      400  {object}  string
 // @Router       /routes/{id}/stops/ [get]
 func (rc RouteController) GetAllBusStopsById(c *gin.Context) {
 	id := c.Param("id")
 	data, err := rc.rs.GetAllBusStopsById(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
 	}
 	c.JSON(http.StatusOK, data)
 }
