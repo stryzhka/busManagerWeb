@@ -48,3 +48,10 @@ CREATE TABLE "routes_bus_stops" (
                                     "route_id"	TEXT,
                                     "bus_stop_id"	TEXT
 );
+
+CREATE TABLE "users" (
+                           "id"	TEXT UNIQUE,
+                           "username"	TEXT NOT NULL UNIQUE,
+                           "password_hash"	TEXT NOT NULL,
+                           PRIMARY KEY("id")
+);

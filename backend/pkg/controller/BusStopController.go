@@ -18,6 +18,7 @@ func NewBusStopController(bss service.IBusStopService) *BusStopController {
 // @Summary      Get bus stop
 // @Description  Get bus stop by ID
 // @Tags         stops
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Bus stop ID"
 // @Success      200  {object}  models.BusStop
@@ -36,6 +37,7 @@ func (bsc BusStopController) GetById(c *gin.Context) {
 // @Summary      Get bus stop
 // @Description  Get bus stop by name
 // @Tags         stops
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        name   path      string  true  "Bus stop name"
 // @Success      200  {object}  models.BusStop
@@ -54,6 +56,7 @@ func (bsc BusStopController) GetByName(c *gin.Context) {
 // @Summary      Get bus stop list
 // @Description  Get bus stop list
 // @Tags         stops
+// @Security ApiKeyAuth
 // @Produce      json
 // @Success      200  {array}  models.BusStop
 // @Failure      400  {object}  string
@@ -70,6 +73,7 @@ func (bsc BusStopController) GetAll(c *gin.Context) {
 // @Summary      Add bus stop
 // @Description  Add bus stop
 // @Tags         stops
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param bus body models.BusStop required "bus stop model"
 // @Success      200  {object}  models.BusStop
@@ -92,6 +96,7 @@ func (bsc BusStopController) Add(c *gin.Context) {
 // @Summary      Delete bus stop
 // @Description  Delete bus stop by ID
 // @Tags         stops
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Bus stop ID"
 // @Success      200  {object}  string
@@ -110,6 +115,7 @@ func (bsc BusStopController) DeleteById(c *gin.Context) {
 // @Summary      Update bus stop
 // @Description  Update bus stop by ID
 // @Tags         stops
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Bus stop ID"
 // @Param bus body models.BusStop required "bus stop model"

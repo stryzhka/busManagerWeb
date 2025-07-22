@@ -4,3 +4,6 @@ user = "postgres"
 password = "root"
 dbname = "postgres"
 server_host_port = "0.0.0.0:8080"
+
+#
+salt = "qergetopo-3442309"
