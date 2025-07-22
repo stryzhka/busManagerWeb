@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "backend/docs"
+	"backend/pkg"
 	"backend/pkg/controller"
 	"backend/pkg/database"
 	"backend/pkg/repository"
@@ -10,6 +11,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
 	"github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
 	"os"
@@ -27,7 +29,12 @@ import (
 
 // @externalDocs.description  OpenAPI
 // @externalDocs.url          https://swagger.io/resources/open-api/
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
+
 	err, connStr, serverConn := initConfig()
 	if err != nil {
 		panic(err)
@@ -52,14 +59,20 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	userRepo, err := repository.NewPostgresUserRepository(db)
+	if err != nil {
+		panic(err)
+	}
 	busService := service.NewBusService(busRepo)
 	driverService := service.NewDriverService(driverRepo)
 	busStopService := service.NewBusStopService(busStopRepo)
 	routeService := service.NewRouteService(routeRepo, driverRepo, busRepo, busStopRepo)
+	userService := service.NewUserService(userRepo)
 	busController := controller.NewBusController(*busService)
 	driverController := controller.NewDriverController(*driverService)
 	busStopController := controller.NewBusStopController(*busStopService)
 	routeController := controller.NewRouteController(routeService)
+	userController := controller.NewUserController(*userService)
 
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
@@ -71,47 +84,91 @@ func main() {
 
 		MaxAge: 12 * 60 * 60, // 12 часов
 	}))
-	router.GET("/api/buses/id/:id", busController.GetById)
-	router.GET("/api/buses/number/:number", busController.GetByNumber)
-	router.GET("/api/buses/", busController.GetAll)
-	router.POST("/api/buses/", busController.Add)
-	router.DELETE("/api/buses/:id", busController.DeleteById)
-	router.PUT("/api/buses/:id", busController.UpdateById)
+	// Группировка API роутов под /api
+	api := router.Group("/api")
+	{
+		// Группа для автобусов
+		buses := api.Group("/buses")
+		buses.Use(func(c *gin.Context) {
+			pkg.UserIdentity(c, *userService)
+		})
+		{
+			buses.GET("/id/:id", busController.GetById)
+			buses.GET("/number/:number", busController.GetByNumber)
+			buses.GET("/", busController.GetAll)
+			buses.POST("/", busController.Add)
+			buses.DELETE("/:id", busController.DeleteById)
+			buses.PUT("/:id", busController.UpdateById)
+		}
 
-	router.GET("/api/drivers/id/:id/", driverController.GetById)
-	router.GET("/api/drivers/series/:series/", driverController.GetByPassportSeries)
-	router.GET("/api/drivers/", driverController.GetAll)
-	router.POST("/api/drivers/", driverController.Add)
-	router.DELETE("/api/drivers/:id/", driverController.DeleteById)
-	router.PUT("/api/drivers/:id/", driverController.UpdateById)
+		// Группа для водителей
+		drivers := api.Group("/drivers")
+		drivers.Use(func(c *gin.Context) {
+			pkg.UserIdentity(c, *userService)
+		})
+		{
+			drivers.GET("/id/:id", driverController.GetById)
+			drivers.GET("/series/:series", driverController.GetByPassportSeries)
+			drivers.GET("/", driverController.GetAll)
+			drivers.POST("/", driverController.Add)
+			drivers.DELETE("/:id", driverController.DeleteById)
+			drivers.PUT("/:id", driverController.UpdateById)
+		}
 
-	router.GET("/api/stops/id/:id/", busStopController.GetById)
-	router.GET("/api/stops/name/:name/", busStopController.GetByName)
-	router.GET("/api/stops/", busStopController.GetAll)
-	router.POST("/api/stops/", busStopController.Add)
-	router.DELETE("/api/stops/:id/", busStopController.DeleteById)
-	router.PUT("/api/stops/:id/", busStopController.UpdateById)
+		// Группа для остановок
+		stops := api.Group("/stops")
+		stops.Use(func(c *gin.Context) {
+			pkg.UserIdentity(c, *userService)
+		})
+		{
+			stops.GET("/id/:id", busStopController.GetById)
+			stops.GET("/name/:name", busStopController.GetByName)
+			stops.GET("/", busStopController.GetAll)
+			stops.POST("/", busStopController.Add)
+			stops.DELETE("/:id", busStopController.DeleteById)
+			stops.PUT("/:id", busStopController.UpdateById)
+		}
 
-	router.GET("/api/routes/:id/", routeController.GetById)
-	router.GET("/api/routes/number/:number/", routeController.GetByNumber)
-	router.GET("/api/routes/", routeController.GetAll)
-	router.POST("/api/routes/", routeController.Add)
-	router.DELETE("/api/routes/:id/", routeController.DeleteById)
-	router.PUT("/api/routes/:id/", routeController.UpdateById)
-	router.POST("/api/routes/:id/drivers/:driverId/", routeController.AssignDriver)
-	router.POST("/api/routes/:id/stops/:busStopId/", routeController.AssignBusStop)
-	router.POST("/api/routes/:id/buses/:busId/", routeController.AssignBus)
-	router.GET("/api/routes/:id/drivers/", routeController.GetAllDriversById)
-	router.GET("/api/routes/:id/stops/", routeController.GetAllBusStopsById)
-	router.GET("/api/routes/:id/buses/", routeController.GetAllBusesById)
-	router.DELETE("/api/routes/:id/drivers/:driverId/", routeController.UnassignDriver)
-	router.DELETE("/api/routes/:id/stops/:busStopId/", routeController.UnassignBusStop)
-	router.DELETE("/api/routes/:id/buses/:busId/", routeController.UnassignBus)
+		// Группа для маршрутов
+		routes := api.Group("/routes")
+		routes.Use(func(c *gin.Context) {
+			pkg.UserIdentity(c, *userService)
+		})
+		{
+			routes.GET("/:id", routeController.GetById)
+			routes.GET("/number/:number", routeController.GetByNumber)
+			routes.GET("/", routeController.GetAll)
+			routes.POST("/", routeController.Add)
+			routes.DELETE("/:id", routeController.UnassignBus)
+			routes.PUT("/:id", routeController.UpdateById)
+			routes.POST("/:id/drivers/:driverId", routeController.AssignDriver)
+			routes.POST("/:id/stops/:busStopId", routeController.AssignBusStop)
+			routes.POST("/:id/buses/:busId", routeController.AssignBus)
+			routes.GET("/:id/drivers", routeController.GetAllDriversById)
+			routes.GET("/:id/stops", routeController.GetAllBusStopsById)
+			routes.GET("/:id/buses", routeController.GetAllBusesById)
+			routes.DELETE("/:id/drivers/:driverId", routeController.UnassignDriver)
+			routes.DELETE("/:id/stops/:busStopId", routeController.UnassignBusStop)
+			routes.DELETE("/:id/buses/:busId", routeController.UnassignBus)
+		}
+
+		// Группа для пользователей
+		users := api.Group("/auth")
+		{
+			users.POST("/sign-in", userController.Signin)
+			users.POST("/sign-up", userController.Signup)
+		}
+	}
+
+	// Swagger документация
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run(serverConn)
 }
 
 func initConfig() (error, string, string) {
+	viper.SetConfigName("config")   // name of config file (without extension)
+	viper.SetConfigType("toml")     // REQUIRED if the config file does not have the extension in the name
+	viper.AddConfigPath("configs/") // path to look for the config file in
 	if _, err := os.Stat(".env"); err == nil {
 		err := godotenv.Load()
 		if err != nil {

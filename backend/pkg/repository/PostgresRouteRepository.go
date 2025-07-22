@@ -75,7 +75,6 @@ VALUES ($1, $2)`, &route.ID,
 		return err
 	}
 	return nil
-
 }
 
 func (r *PostgresRouteRepository) GetAll() ([]models.Route, error) {

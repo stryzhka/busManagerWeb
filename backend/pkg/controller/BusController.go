@@ -19,6 +19,7 @@ func NewBusController(bs service.BusService) *BusController {
 // @Summary      Get bus
 // @Description  Get bus by ID
 // @Tags         buses
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Bus ID"
 // @Success      200  {object}  models.Bus
@@ -37,6 +38,7 @@ func (bc BusController) GetById(c *gin.Context) {
 // @Summary      Get bus
 // @Description  Get bus by number
 // @Tags         buses
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        number   path      string  true  "Bus register number"
 // @Success      200  {object}  models.Bus
@@ -55,6 +57,7 @@ func (bc BusController) GetByNumber(c *gin.Context) {
 // @Summary      Get bus list
 // @Description  Get bus list
 // @Tags         buses
+// @Security ApiKeyAuth
 // @Produce      json
 // @Success      200  {array}  models.Bus
 // @Failure      400  {object}  string
@@ -67,6 +70,7 @@ func (bc BusController) GetAll(c *gin.Context) {
 // @Summary      Add bus
 // @Description  Add bus
 // @Tags         buses
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param bus body models.Bus required "bus model"
 // @Success      200  {object}  models.Bus
@@ -90,6 +94,7 @@ func (bc BusController) Add(c *gin.Context) {
 // @Summary      Delete bus
 // @Description  Delete bus by ID
 // @Tags         buses
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Bus ID"
 // @Success      200  {object}  string
@@ -108,6 +113,7 @@ func (bc BusController) DeleteById(c *gin.Context) {
 // @Summary      Update bus
 // @Description  Update bus by ID
 // @Tags         buses
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Bus ID"
 // @Param bus body models.Bus required "bus model"

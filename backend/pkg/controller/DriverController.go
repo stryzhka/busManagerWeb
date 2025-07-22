@@ -19,6 +19,7 @@ func NewDriverController(ds service.DriverService) *DriverController {
 // @Summary      Get driver
 // @Description  Get driver by ID
 // @Tags         drivers
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Driver ID"
 // @Success      200  {object}  models.Driver
@@ -37,6 +38,7 @@ func (dc DriverController) GetById(c *gin.Context) {
 // @Summary      Get driver
 // @Description  Get driver by passport series
 // @Tags         drivers
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        series   path      string  true  "Driver passport series"
 // @Success      200  {object}  models.Driver
@@ -55,6 +57,7 @@ func (dc DriverController) GetByPassportSeries(c *gin.Context) {
 // @Summary      Get driver list
 // @Description  Get driver list
 // @Tags         drivers
+// @Security ApiKeyAuth
 // @Produce      json
 // @Success      200  {array}  models.Driver
 // @Failure      400  {object}  string
@@ -67,6 +70,7 @@ func (dc DriverController) GetAll(c *gin.Context) {
 // @Summary      Add driver
 // @Description  Add driver
 // @Tags         drivers
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param driver body models.Driver required "driver model"
 // @Success      200  {object}  models.Driver
@@ -90,6 +94,7 @@ func (dc DriverController) Add(c *gin.Context) {
 // @Summary      Delete driver
 // @Description  Delete driver by ID
 // @Tags         drivers
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Driver ID"
 // @Success      200  {object}  string
@@ -108,6 +113,7 @@ func (dc DriverController) DeleteById(c *gin.Context) {
 // @Summary      Update driver
 // @Description  Update driver by ID
 // @Tags         drivers
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Driver ID"
 // @Param driver body models.Driver required "driver model"

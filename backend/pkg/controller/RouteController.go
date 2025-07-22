@@ -18,6 +18,7 @@ func NewRouteController(rs service.IRouteService) *RouteController {
 // @Summary      Get route
 // @Description  Get route by ID
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Success      200  {object}  models.Route
@@ -36,6 +37,7 @@ func (rc RouteController) GetById(c *gin.Context) {
 // @Summary      Get route by number
 // @Description  Get route by number
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        number   path      string  true  "Route number"
 // @Success      200  {object}  models.Route
@@ -54,6 +56,7 @@ func (rc RouteController) GetByNumber(c *gin.Context) {
 // @Summary      Get routes list
 // @Description  Get routes list
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Success      200  {array}  models.Route
 // @Failure      400  {object}  string
@@ -70,6 +73,7 @@ func (rc RouteController) GetAll(c *gin.Context) {
 // @Summary      Add route
 // @Description  Add route
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param route body models.Route required "route model"
 // @Success      200  {object}  models.Route
@@ -93,6 +97,7 @@ func (rc RouteController) Add(c *gin.Context) {
 // @Summary      Delete route
 // @Description  Delete route by ID
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Success      200  {object}  string
@@ -111,6 +116,7 @@ func (rc RouteController) DeleteById(c *gin.Context) {
 // @Summary      Update route
 // @Description  Update route by ID
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Param route body models.Route required "route model"
@@ -134,6 +140,7 @@ func (rc RouteController) UpdateById(c *gin.Context) {
 // @Summary      Assign driver to route
 // @Description  Assign driver to route
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Param        driverId   path      string  true  "Driver ID"
@@ -154,6 +161,7 @@ func (rc RouteController) AssignDriver(c *gin.Context) {
 // @Summary      Assign bus stop to route
 // @Description  Assign bus stop to route
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Param        busStopId   path      string  true  "Bus stop ID"
@@ -174,6 +182,7 @@ func (rc RouteController) AssignBusStop(c *gin.Context) {
 // @Summary      Assign bus to route
 // @Description  Assign bus to route
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Param        busId   path      string  true  "Bus ID"
@@ -194,6 +203,7 @@ func (rc RouteController) AssignBus(c *gin.Context) {
 // @Summary      Unassign driver from route
 // @Description  Unassign driver from route
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Param        driverId   path      string  true  "Driver ID"
@@ -214,6 +224,7 @@ func (rc RouteController) UnassignDriver(c *gin.Context) {
 // @Summary      Unassign bus stop from route
 // @Description  Unassign bus stop from route
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Param        busStopId   path      string  true  "Bus stop ID"
@@ -234,6 +245,7 @@ func (rc RouteController) UnassignBusStop(c *gin.Context) {
 // @Summary      Unassign bus from route
 // @Description  Unassign bus from route
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Param        busId   path      string  true  "Bus ID"
@@ -254,6 +266,7 @@ func (rc RouteController) UnassignBus(c *gin.Context) {
 // @Summary      Get all drivers on route
 // @Description  Get all drivers on route by route ID
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Success      200  {object}  models.Driver
@@ -272,6 +285,7 @@ func (rc RouteController) GetAllDriversById(c *gin.Context) {
 // @Summary      Get all buses on route
 // @Description  Get all buses on route by route ID
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Success      200  {object}  models.Bus
@@ -290,6 +304,7 @@ func (rc RouteController) GetAllBusesById(c *gin.Context) {
 // @Summary      Get all bus stops on route
 // @Description  Get all bus stops on route by route ID
 // @Tags         routes
+// @Security ApiKeyAuth
 // @Produce      json
 // @Param        id   path      string  true  "Route ID"
 // @Success      200  {object}  models.BusStop

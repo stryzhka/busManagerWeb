@@ -5,3 +5,4 @@ DROP TABLE drivers;
 DROP TABLE buses;
 DROP TABLE routes;
 DROP TABLE bus_stops;
+DROP TABLE users;

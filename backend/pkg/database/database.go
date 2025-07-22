@@ -7,7 +7,6 @@ import (
 
 func NewPostgresDatabase(connStr string) (*sql.DB, error) {
 	db, err := sql.Open("postgres", connStr)
-
 	if err != nil {
 		return nil, err
 	}
